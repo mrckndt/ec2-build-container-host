@@ -6,7 +6,7 @@ let
   allowedTCPPorts = [ 80 443 8065 ];
   allowedUDPPorts = [ ];
   autoUpdateContainers = true;
-  hostName = "nixos-docker-test";
+  hostName = "nixos-container-host";
   systemPackages = with pkgs; [
     bind
     bmon

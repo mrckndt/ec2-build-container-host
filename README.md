@@ -1,6 +1,6 @@
-## ec2-build-docker-host
+## ec2-build-container-host
 
-This script sets up a Docker test system based on NixOS. For configuration options consult:
+This script sets up a container host test system based on NixOS. For configuration options consult:
 
 https://search.nixos.org/options
 
@@ -8,12 +8,12 @@ To change the resulting system, edit the *configuration.nix* and re-run the scri
 
 ### Usage
 ```
-git clone https://github.com/mrckndt/ec2-build-docker-host
-cd ec2-build-docker-host
+git clone https://github.com/mrckndt/ec2-build-container-host
+cd ec2-build-container-host
 
-bash ec2-build-docker-host -i <PATH-TO-IDENTITY-FILE>
+bash ec2-build-container-host -i <PATH-TO-IDENTITY-FILE>
 or
-./ec2-build-docker-host -i <PATH-TO-IDENTITY-FILE>
+./ec2-build-container-host -i <PATH-TO-IDENTITY-FILE>
 ```
 
 Follow the shown instructions and wait...
