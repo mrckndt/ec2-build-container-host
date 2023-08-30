@@ -5,7 +5,8 @@ with lib;
 let
   allowedTCPPorts = [ 80 443 8065 ];
   allowedUDPPorts = [ ];
-  autoUpdateContainers = true;
+  autoUpdateDockerContainers = true;
+  defaultContainerBackend = "docker";
   hostName = "nixos-container-host";
   systemPackages = with pkgs; [
     bind
@@ -149,9 +150,10 @@ in
 
   virtualisation = {
     docker.enable = true;
-    oci-containers.backend = "docker";
+    podman.enable = true;
 
-    oci-containers.containers.watchtower = mkIf autoUpdateContainers {
+    oci-containers.backend = defaultContainerBackend;
+    oci-containers.containers.watchtower = mkIf autoUpdateDockerContainers {
       image = "containrrr/watchtower:latest";
       volumes = [ "/var/run/docker.sock:/var/run/docker.sock" ];
       extraOptions = [
