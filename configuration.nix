@@ -10,19 +10,23 @@ let
   hostName = "nixos-container-host";
   # system-wide available packages - https://search.nixos.org/packages
   systemPackages = with pkgs; [
+    atool
     bind
     bmon
     docker-compose
     file
+    git
     htop
     iotop
     ncdu
     netcat-gnu
+    net-tools
     nmap
     nmon
     psmisc
     ranger
     rsync
+    unzip
   ];
   stateVersion = "23.05";
   timeZone = "Europe/Berlin";
