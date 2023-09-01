@@ -133,6 +133,11 @@ in
         enable = true;
         theme = "gentoo";
       };
+      shellAliases = {
+        ":q" = "exit";
+        ".." = "cd ..";
+        "grep" = "grep --color=auto";
+      };
     };
   };
 

@@ -8,6 +8,18 @@ To change the resulting system, edit the *configuration.nix* and re-run the scri
 
 ### Usage
 ```
+Usage:
+  ec2-build-container-host [OPTION...]
+
+Options:
+  -h  Print this help
+  -i  Path to SSH identity file
+  -d  Domain or IP to EC2 instance
+  -r  Reboot after building the system
+  -b  Switch to new system on next boot
+
+```
+```
 git clone https://github.com/mrckndt/ec2-build-container-host
 cd ec2-build-container-host
 

@@ -8,14 +8,37 @@ Usage:
 Options:
   -h  Print this help
   -i  Path to SSH identity file
+  -d  Domain or IP to EC2 instance
+  -r  Reboot after building the system
+  -b  Switch to new system on next boot
 
 EOF
 }
 
-while getopts i:h opt; do
+dialog() {
+  echo "Please open $(tput bold)https://nixos.org/download#nixos-amazon$(tput sgr0) and follow the
+instructions to launch an EC2 instance.
+
+$(tput bold)Note: it's recommended to use a disk size of >=20GB.$(tput sgr0)"
+  echo
+
+  read -r -p "Domain or IP of launched EC2 instance: " host
+  echo
+}
+
+while getopts d:i:hrb opt; do
   case "$opt" in
     i)
       identityFile="${OPTARG}"
+      ;;
+    d)
+      domain="${OPTARG}"
+      ;;
+    r)
+      reboot=true
+      ;;
+    b)
+      boot=true
       ;;
     h)
       usage
@@ -30,28 +53,34 @@ done
 
 shift $((OPTIND - 1))
 
-if [ -z ${identityFile} ]; then
+if [ -z "${identityFile}" ]; then
   echo "missing option: -i is required" >&2
   usage >&2
   exit 64
 fi
 
-if [ -z $(type -P "scp") ] || [ -z $(type -P "ssh") ]; then
-  echo "SSH needs to be installed" >&2
+if [ -z "$(type -P 'scp')" ] || [ -z "$(type -P 'ssh')" ]; then
+  echo "missing dependency: scp or ssh not found in \$PATH" >&2
   exit 64
 fi
 
-echo "Please open $(tput bold)https://nixos.org/download#nixos-amazon$(tput sgr0) and follow the
-instructions to launch an EC2 instance.
+if [ -z "${domain}" ]; then
+  dialog
+else
+  host="${domain}"
+fi
 
-$(tput bold)Note: it's recommended to use a disk size of >=20GB.$(tput sgr0)"
-echo
-
-read -p "Domain or IP of launched EC2 instance: " host
-
-echo
 echo "$(tput bold)Copying configuration to ${host}...$(tput sgr0)"
 scp -i "${identityFile}" ./configuration.nix root@"${host}":/etc/nixos/configuration.nix
 
 echo "$(tput bold)Building system...$(tput sgr0)"
-ssh -i "${identityFile}" root@"${host}" "nixos-rebuild switch --upgrade"
+if [ "${boot}" = true ]; then
+  ssh -i "${identityFile}" root@"${host}" "nixos-rebuild boot --upgrade"
+else
+  ssh -i "${identityFile}" root@"${host}" "nixos-rebuild switch --upgrade"
+fi
+
+if [ "${reboot}" = true ]; then
+  echo "$(tput bold)Rebooting system...$(tput sgr0)"
+  ssh -i "${identityFile}" root@"${host}" "systemctl reboot"
+fi
