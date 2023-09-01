@@ -8,6 +8,7 @@ let
   autoUpdateDockerContainers = true;
   defaultContainerBackend = "docker";
   hostName = "nixos-container-host";
+  # system-wide available packages - https://search.nixos.org/packages
   systemPackages = with pkgs; [
     bind
     bmon
