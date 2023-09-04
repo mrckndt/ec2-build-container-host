@@ -20,7 +20,7 @@ let
     iotop
     ncdu
     netcat-gnu
-    net-tools
+    nettools
     nmap
     nmon
     psmisc
